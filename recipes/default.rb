@@ -87,8 +87,9 @@ execute "package" do
   notifies :run, "execute[copy_wars]", :immediately
 end
 execute "copy_wars" do
-  command "cd #{node['cookbook-qubell-build']['dest_path']}/webapp; for i in $(find -regex '.*/target/[^/]*.war');do cp $i #{node['cookbook-qubell-build']['target']};done"
+  command "rm -rf #{node['cookbook-qubell-build']['target']}/*;cd #{node['cookbook-qubell-build']['dest_path']}/webapp; for i in $(find -regex '.*/target/[^/]*.war');do cp $i #{node['cookbook-qubell-build']['target']}/`basename $i`-`md5sum $i| awk '{ print $1 }'`; done"
   notifies :create, "ruby_block[set attrs]"
+  notifies :restart, "service[SimpleHttpServer]"
   action :nothing
 end
 
