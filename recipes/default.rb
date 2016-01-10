@@ -26,9 +26,9 @@ case node['platform_family']
       to "/usr/bin/mvn3"
     end
   when "rhel"
-    mvn_version = "3.2.1"
+    mvn_version = node['cookbook-qubell-build']['maven_version']
     remote_file "/opt/apache-maven.tar.gz" do
-      source "http://mirror.olnevhost.net/pub/apache/maven/binaries/apache-maven-#{mvn_version}-bin.tar.gz"
+      source "http://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/#{mvn_version}/apache-maven-#{mvn_version}-bin.tar.gz"
     end
 
     bash "unpack apache-maven" do
